@@ -1,10 +1,8 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
 
 @Entity
-@Data
 public class Skill {
 
     @Id
@@ -12,6 +10,25 @@ public class Skill {
     private Long id;
 
     private String name;
-    private String category;
     private Boolean active = true;
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
 }
