@@ -1,6 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.model.SearchQueryRecord;
+import com.example.demo.entity.SearchQueryRecord;
 import java.util.List;
 
 public interface SearchQueryService {
