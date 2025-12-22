@@ -1,14 +1,10 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
-
-import java.time.LocalDateTime;
+import lombok.Data;
 
 @Entity
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class Employee {
 
     @Id
@@ -16,25 +12,8 @@ public class Employee {
     private Long id;
 
     private String fullName;
-
-    @Column(unique = true)
     private String email;
-
     private String department;
     private String jobTitle;
-
     private Boolean active = true;
-
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-
-    @PrePersist
-    public void onCreate() {
-        createdAt = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    public void onUpdate() {
-        updatedAt = LocalDateTime.now();
-    }
 }
