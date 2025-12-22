@@ -1,18 +1,12 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.Employee;
-
 import java.util.List;
 
 public interface EmployeeService {
-
-    Employee createEmployee(Employee employee);
-
-    Employee updateEmployee(Long id, Employee employee);
-
-    Employee getEmployeeById(Long id);
-
-    List<Employee> getAllEmployees();
-
-    void deactivateEmployee(Long id);
+    Employee create(Employee e);
+    Employee update(Long id, Employee e);
+    Employee get(Long id);
+    List<Employee> getAll();
+    void deactivate(Long id);
 }
