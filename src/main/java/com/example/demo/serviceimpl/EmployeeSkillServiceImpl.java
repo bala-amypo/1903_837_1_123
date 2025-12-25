@@ -51,9 +51,11 @@ public class EmployeeSkillServiceImpl implements EmployeeSkillService {
         return esRepo.findBySkillIdAndActiveTrue(id);
     }
 
-    public void deactivateEmployeeSkill(Long id) {
-        EmployeeSkill es = esRepo.findById(id).orElseThrow();
-        es.setActive(false);
-        esRepo.save(es);
-    }
+    @Override
+public void deactivate(Long id) {
+    EmployeeSkill es = esRepo.findById(id).orElseThrow();
+    es.setActive(false);
+    esRepo.save(es);
+}
+
 }

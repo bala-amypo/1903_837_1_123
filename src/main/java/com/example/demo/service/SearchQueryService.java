@@ -4,7 +4,10 @@ import com.example.demo.model.SearchQueryRecord;
 import java.util.List;
 
 public interface SearchQueryService {
-    List<Object> search(List<String> skills, Long userId);
-    SearchQueryRecord get(Long id);
+
+    List<Employee> searchEmployeesBySkills(List<String> skills, Long userId);
+
+    SearchQueryRecord getQueryById(Long id);
+
     List<SearchQueryRecord> getByUser(Long userId);
 }
