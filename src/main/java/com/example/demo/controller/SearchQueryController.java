@@ -7,6 +7,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/search")
+@Tag(name = "Search")
 public class SearchQueryController {
 
     private final SearchQueryService service;
@@ -16,10 +17,21 @@ public class SearchQueryController {
     }
 
     @PostMapping("/employees")
-    public List<Object> search(@RequestBody List<String> skills,
-                               @RequestParam Long userId) {
-        return service.search(skills, userId);
+    public List<Employee> search(@RequestBody EmployeeSearchRequest req,
+                                 @RequestParam Long userId) {
+        return service.searchEmployeesBySkills(req.getSkills(), userId);
+    }
+
+    @GetMapping("/{id}")
+    public SearchQueryRecord get(@PathVariable Long id) {
+        return service.getQueryById(id);
+    }
+
+    @GetMapping("/user/{userId}")
+    public List<SearchQueryRecord> getForUser(@PathVariable Long userId) {
+        return service.getQueriesForUser(userId);
     }
 }
+
 
 
