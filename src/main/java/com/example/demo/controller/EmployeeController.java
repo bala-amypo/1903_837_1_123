@@ -18,17 +18,20 @@ public class EmployeeController {
 
     @PostMapping
     public Employee create(@RequestBody Employee employee) {
-        return service.create(employee);
+        return service.createEmployee(employee);
+
     }
 
     @GetMapping("/{id}")
     public Employee getById(@PathVariable Long id) {
-        return service.get(id);
+        return service.getEmployeeById(id);
+
     }
 
     @GetMapping
     public List<Employee> getAll() {
-        return service.getAll();
+        return service.getAllEmployees();
+
     }
 
     @PutMapping("/{id}")
