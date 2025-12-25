@@ -7,6 +7,7 @@ import com.example.demo.service.SearchQueryService;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Service
 public class SearchQueryServiceImpl implements SearchQueryService {
 
     private final SearchQueryRecordRepository repo;
