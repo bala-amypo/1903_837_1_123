@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.Employee;
+import com.example.demo.model.Employee;
 import com.example.demo.service.EmployeeService;
 import org.springframework.web.bind.annotation.*;
 
