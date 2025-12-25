@@ -23,6 +23,11 @@ public class SkillServiceImpl implements SkillService {
         ex.setName(s.getName());
         return repo.save(ex);
     }
+    @Override
+public List<Skill> getAll() {
+    return repository.findAll();
+}
+
 
     @Override
 public void deactivate(Long id) {

@@ -50,6 +50,11 @@ public class EmployeeSkillServiceImpl implements EmployeeSkillService {
     public List<EmployeeSkill> getEmployeesBySkill(Long id) {
         return esRepo.findBySkillIdAndActiveTrue(id);
     }
+    @Override
+public List<EmployeeSkill> getBySkill(Long skillId) {
+    return repository.findBySkillIdAndActiveTrue(skillId);
+}
+
 
     @Override
 public void deactivate(Long id) {
