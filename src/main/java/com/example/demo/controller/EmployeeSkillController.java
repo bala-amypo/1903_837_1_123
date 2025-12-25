@@ -8,7 +8,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/employee-skills")
-@Tag(name = "Employee Skills")
 public class EmployeeSkillController {
 
     private final EmployeeSkillService service;
