@@ -1,63 +1,73 @@
-package com.example.demo.service.impl;
+package com.example.demo.serviceimpl;
 
-import com.example.demo.model.*;
-import com.example.demo.repository.*;
+import com.example.demo.model.Employee;
+import com.example.demo.model.SearchQueryRecord;
+import com.example.demo.repository.EmployeeSkillRepository;
+import com.example.demo.repository.SearchQueryRecordRepository;
 import com.example.demo.service.SearchQueryService;
-
-import java.util.*;
-import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class SearchQueryServiceImpl implements SearchQueryService {
 
-    private final SearchQueryRecordRepository repo;
+    private final SearchQueryRecordRepository searchRepo;
     private final EmployeeSkillRepository esRepo;
 
-    public SearchQueryServiceImpl(SearchQueryRecordRepository repo,
+    public SearchQueryServiceImpl(SearchQueryRecordRepository searchRepo,
                                   EmployeeSkillRepository esRepo) {
-        this.repo = repo;
+        this.searchRepo = searchRepo;
         this.esRepo = esRepo;
     }
 
-    public void saveQuery(SearchQueryRecord r) {
-        repo.save(r);
-    }
+    @Override
+    public List<Employee> searchEmployeesBySkills(List<String> skills, Long searcherId) {
 
-    public List<Employee> searchEmployeesBySkills(List<String> skills, Long userId) {
+        if (skills == null || skills.isEmpty()) {
+            throw new IllegalArgumentException("Skills list must not be empty");
+        }
 
-        if (skills == null || skills.isEmpty())
-            throw new IllegalArgumentException("must not be empty");
-
-        List<String> normalized = skills.stream()
-                .map(s -> s.trim().toLowerCase())
+        // ✅ normalize skills
+        List<String> normalizedSkills = skills.stream()
+                .filter(Objects::nonNull)
+                .map(String::trim)
+                .map(String::toLowerCase)
                 .distinct()
                 .collect(Collectors.toList());
 
-        List<Employee> employees =
-        esRepo.findEmployeesByAllSkillNames(
+        // ✅ repository call (3 PARAMETERS – IMPORTANT)
+        List<Employee> result = esRepo.findEmployeesByAllSkillNames(
                 normalizedSkills,
-                Long.valueOf(searcherId),
+                searcherId,
                 Long.valueOf(normalizedSkills.size())
         );
 
+        // ✅ persist search query
         SearchQueryRecord record = new SearchQueryRecord();
-        record.setSearcherId(userId);
-        record.setSkillsRequested(String.join(",", normalized));
+        record.setSearcherId(searcherId);
+        record.setSkillsRequested(String.join(",", normalizedSkills));
         record.setResultsCount(result.size());
-        repo.save(record);
+        searchRepo.save(record);
 
         return result;
     }
 
+    @Override
     public SearchQueryRecord getQueryById(Long id) {
-        return repo.findById(id).orElseThrow();
+        return searchRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Query not found"));
     }
 
     @Override
-public List<SearchQueryRecord> getByUser(Long userId) {
-    return repo.findBySearcherId(userId);
-}
+    public List<SearchQueryRecord> getQueriesForUser(Long userId) {
+        return searchRepo.findBySearcherId(userId);
+    }
 
+    @Override
+    public void saveQuery(SearchQueryRecord record) {
+        searchRepo.save(record);
+    }
 }
