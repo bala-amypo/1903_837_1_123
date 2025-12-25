@@ -10,12 +10,10 @@ import java.util.List;
 
 public interface EmployeeSkillRepository extends JpaRepository<EmployeeSkill, Long> {
 
-    // Used by many-to-many tests
     List<EmployeeSkill> findByEmployeeIdAndActiveTrue(Long employeeId);
 
     List<EmployeeSkill> findBySkillIdAndActiveTrue(Long skillId);
 
-    // 🔥 FIXED QUERY (THIS WAS CRASHING YOUR APP)
     @Query("""
         SELECT es.employee
         FROM EmployeeSkill es
@@ -26,11 +24,9 @@ public interface EmployeeSkillRepository extends JpaRepository<EmployeeSkill, Lo
         GROUP BY es.employee
         HAVING COUNT(DISTINCT LOWER(es.skill.name)) = :skillCount
     """)
-    List<Employee> employees =
-        employeeSkillRepository.findEmployeesByAllSkillNames(
-                normalizedSkills,
-                searcherId,
-                (long) normalizedSkills.size()
-        );
-
+    List<Employee> findEmployeesByAllSkillNames(
+            @Param("skillNames") List<String> skillNames,
+            @Param("searcherId") Long searcherId,
+            @Param("skillCount") Long skillCount
+    );
 }
