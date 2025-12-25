@@ -48,7 +48,9 @@ public class SearchQueryServiceImpl implements SearchQueryService {
         return repo.findById(id).orElseThrow();
     }
 
-    public List<SearchQueryRecord> getQueriesForUser(Long id) {
-        return repo.findBySearcherId(id);
-    }
+    @Override
+public List<SearchQueryRecord> getByUser(Long userId) {
+    return repo.findBySearcherId(userId);
+}
+
 }
