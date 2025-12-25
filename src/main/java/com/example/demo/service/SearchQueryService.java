@@ -7,10 +7,11 @@ import java.util.List;
 
 public interface SearchQueryService {
 
-    List<Employee> searchEmployeesBySkills(List<String> skills, Long userId);
+    List<Employee> searchEmployeesBySkills(List<String> skills, Long searcherId);
 
     SearchQueryRecord getQueryById(Long id);
 
-    List<SearchQueryRecord> getByUser(Long userId);
-}
+    List<SearchQueryRecord> getQueriesForUser(Long userId);
 
+    void saveQuery(SearchQueryRecord record);
+}
