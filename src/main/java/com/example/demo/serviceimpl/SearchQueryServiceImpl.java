@@ -35,8 +35,12 @@ public class SearchQueryServiceImpl implements SearchQueryService {
                 .distinct()
                 .collect(Collectors.toList());
 
-        List<Employee> result =
-                esRepo.findEmployeesByAllSkillNames(normalized, (long) normalized.size());
+        List<Employee> employees =
+        esRepo.findEmployeesByAllSkillNames(
+                normalizedSkills,
+                Long.valueOf(searcherId),
+                Long.valueOf(normalizedSkills.size())
+        );
 
         SearchQueryRecord record = new SearchQueryRecord();
         record.setSearcherId(userId);
