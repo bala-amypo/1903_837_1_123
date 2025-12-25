@@ -1,42 +1,50 @@
-package com.example.demo.service.impl;
+package com.example.demo.serviceimpl;
 
-import java.util.List;
 import com.example.demo.model.Skill;
 import com.example.demo.repository.SkillRepository;
 import com.example.demo.service.SkillService;
 
+import org.springframework.stereotype.Service;
 
+import java.util.List;
 
+@Service
 public class SkillServiceImpl implements SkillService {
 
-    private final SkillRepository repo;
+    private final SkillRepository skillRepository;
 
-    public SkillServiceImpl(SkillRepository repo) {
-        this.repo = repo;
+    public SkillServiceImpl(SkillRepository skillRepository) {
+        this.skillRepository = skillRepository;
     }
 
-    public Skill createSkill(Skill s) {
-        s.setActive(true);
-        return repo.save(s);
+    @Override
+    public Skill create(Skill skill) {
+        return skillRepository.save(skill);
     }
 
-    public Skill updateSkill(Long id, Skill s) {
-        Skill ex = repo.findById(id)
+    @Override
+    public Skill update(Long id, Skill skill) {
+        Skill existing = get(id);
+        skill.setId(id);
+        return skillRepository.save(skill);
+    }
+
+    // 🔥 REQUIRED BY INTERFACE
+    @Override
+    public Skill get(Long id) {
+        return skillRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Skill not found"));
-        ex.setName(s.getName());
-        return repo.save(ex);
     }
-    @Override
-public List<Skill> getAll() {
-    return repository.findAll();
-}
-
 
     @Override
-public void deactivate(Long id) {
-    Skill s = repo.findById(id)
-            .orElseThrow(() -> new RuntimeException("Skill not found"));
-    s.setActive(false);
-    repo.save(s);
-}
+    public List<Skill> getAll() {
+        return skillRepository.findAll();
+    }
+
+    @Override
+    public void deactivate(Long id) {
+        Skill skill = get(id);
+        skill.setActive(false);
+        skillRepository.save(skill);
+    }
 }

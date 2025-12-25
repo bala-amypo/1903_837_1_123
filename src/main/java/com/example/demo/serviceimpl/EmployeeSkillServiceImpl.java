@@ -1,66 +1,51 @@
-package com.example.demo.service.impl;
+package com.example.demo.serviceimpl;
 
-import com.example.demo.model.*;
-import com.example.demo.repository.*;
+import com.example.demo.model.EmployeeSkill;
+import com.example.demo.repository.EmployeeSkillRepository;
 import com.example.demo.service.EmployeeSkillService;
 
-import java.util.List;
-import java.util.Set;
+import org.springframework.stereotype.Service;
 
+import java.util.List;
+
+@Service
 public class EmployeeSkillServiceImpl implements EmployeeSkillService {
 
-    private final EmployeeSkillRepository esRepo;
-    private final EmployeeRepository eRepo;
-    private final SkillRepository sRepo;
+    private final EmployeeSkillRepository employeeSkillRepository;
 
-    private static final Set<String> LEVELS =
-            Set.of("Beginner", "Intermediate", "Advanced", "Expert");
-
-    public EmployeeSkillServiceImpl(EmployeeSkillRepository esRepo,
-                                    EmployeeRepository eRepo,
-                                    SkillRepository sRepo) {
-        this.esRepo = esRepo;
-        this.eRepo = eRepo;
-        this.sRepo = sRepo;
+    public EmployeeSkillServiceImpl(EmployeeSkillRepository employeeSkillRepository) {
+        this.employeeSkillRepository = employeeSkillRepository;
     }
-
-    public EmployeeSkill createEmployeeSkill(EmployeeSkill es) {
-
-        if (es.getYearsOfExperience() < 0)
-            throw new IllegalArgumentException("Experience years");
-
-        if (!LEVELS.contains(es.getProficiencyLevel()))
-            throw new IllegalArgumentException("Invalid proficiency");
-
-        Employee e = eRepo.findById(es.getEmployee().getId()).orElseThrow();
-        if (!e.getActive())
-            throw new IllegalArgumentException("inactive employee");
-
-        Skill s = sRepo.findById(es.getSkill().getId()).orElseThrow();
-        if (!s.getActive())
-            throw new IllegalArgumentException("inactive skill");
-
-        return esRepo.save(es);
-    }
-
-    public List<EmployeeSkill> getSkillsForEmployee(Long id) {
-        return esRepo.findByEmployeeIdAndActiveTrue(id);
-    }
-
-    public List<EmployeeSkill> getEmployeesBySkill(Long id) {
-        return esRepo.findBySkillIdAndActiveTrue(id);
-    }
-    @Override
-public List<EmployeeSkill> getBySkill(Long skillId) {
-    return repository.findBySkillIdAndActiveTrue(skillId);
-}
-
 
     @Override
-public void deactivate(Long id) {
-    EmployeeSkill es = esRepo.findById(id).orElseThrow();
-    es.setActive(false);
-    esRepo.save(es);
-}
+    public EmployeeSkill create(EmployeeSkill skill) {
+        return employeeSkillRepository.save(skill);
+    }
 
+    @Override
+    public EmployeeSkill update(Long id, EmployeeSkill skill) {
+        EmployeeSkill existing = employeeSkillRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("EmployeeSkill not found"));
+        skill.setId(id);
+        return employeeSkillRepository.save(skill);
+    }
+
+    // 🔥 REQUIRED BY INTERFACE
+    @Override
+    public List<EmployeeSkill> getByEmployee(Long employeeId) {
+        return employeeSkillRepository.findByEmployeeIdAndActiveTrue(employeeId);
+    }
+
+    @Override
+    public List<EmployeeSkill> getBySkill(Long skillId) {
+        return employeeSkillRepository.findBySkillIdAndActiveTrue(skillId);
+    }
+
+    @Override
+    public void deactivate(Long id) {
+        EmployeeSkill skill = employeeSkillRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("EmployeeSkill not found"));
+        skill.setActive(false);
+        employeeSkillRepository.save(skill);
+    }
 }
