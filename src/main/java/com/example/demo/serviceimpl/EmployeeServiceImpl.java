@@ -33,10 +33,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         return repo.findAll();
     }
 
-    public void deactivateEmployee(Long id) {
-        Employee e = repo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Employee not found"));
-        e.setActive(false);
-        repo.save(e);
-    }
+    @Override
+public void deactivate(Long id) {
+    Employee e = repo.findById(id)
+            .orElseThrow(() -> new RuntimeException("Employee not found"));
+    e.setActive(false);
+    repo.save(e);
+}
 }

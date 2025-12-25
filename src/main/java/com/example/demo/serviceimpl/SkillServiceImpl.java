@@ -24,10 +24,11 @@ public class SkillServiceImpl implements SkillService {
         return repo.save(ex);
     }
 
-    public void deactivateSkill(Long id) {
-        Skill s = repo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Skill not found"));
-        s.setActive(false);
-        repo.save(s);
-    }
+    @Override
+public void deactivate(Long id) {
+    Skill s = repo.findById(id)
+            .orElseThrow(() -> new RuntimeException("Skill not found"));
+    s.setActive(false);
+    repo.save(s);
+}
 }

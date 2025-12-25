@@ -4,9 +4,9 @@ import com.example.demo.model.Employee;
 import java.util.List;
 
 public interface EmployeeService {
-    Employee create(Employee e);
-    Employee update(Long id, Employee e);
-    Employee get(Long id);
-    List<Employee> getAll();
+    Employee createEmployee(Employee employee);
+    Employee updateEmployee(Long id, Employee employee);
+    Employee getEmployeeById(Long id);
+    List<Employee> getAllEmployees();
     void deactivate(Long id);
 }
