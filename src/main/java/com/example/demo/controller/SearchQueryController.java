@@ -31,7 +31,7 @@ public class SearchQueryController {
     }
 
     @GetMapping("/user/{userId}")
-    public List<SearchQueryRecord> getForUser(@PathVariable Long userId) {
-        return service.getQueriesForUser(userId);
+    public List<SearchQueryRecord> getByUser(@PathVariable Long userId) {
+        return service.getByUser(userId);
     }
 }

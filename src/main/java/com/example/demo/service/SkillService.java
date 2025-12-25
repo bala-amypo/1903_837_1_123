@@ -4,7 +4,9 @@ import com.example.demo.model.Skill;
 import java.util.List;
 
 public interface SkillService {
-    Skill createSkill(Skill skill);
-    Skill updateSkill(Long id, Skill skill);
+    Skill create(Skill skill);
+    Skill update(Long id, Skill skill);
+    Skill get(Long id);
+    List<Skill> getAll();
     void deactivate(Long id);
 }

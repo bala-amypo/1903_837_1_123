@@ -13,3 +13,4 @@ public interface SearchQueryService {
 
     List<SearchQueryRecord> getByUser(Long userId);
 }
+
