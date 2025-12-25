@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.SkillCategory;
+import com.example.demo.model.SkillCategory;
 import com.example.demo.service.SkillCategoryService;
 import org.springframework.web.bind.annotation.*;
 
