@@ -1,6 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.SkillCategory;
+import com.example.demo.model.SkillCategory;
 import java.util.List;
 
 public interface SkillCategoryService {
