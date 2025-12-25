@@ -1,12 +1,9 @@
-package com.example.demo.serviceimpl;
+package com.example.demo.service.impl;
 
-import com.example.demo.entity.Skill;
+import com.example.demo.model.Skill;
 import com.example.demo.repository.SkillRepository;
 import com.example.demo.service.SkillService;
-import org.springframework.stereotype.Service;
-import java.util.List;
 
-@Service
 public class SkillServiceImpl implements SkillService {
 
     private final SkillRepository repo;
@@ -15,26 +12,21 @@ public class SkillServiceImpl implements SkillService {
         this.repo = repo;
     }
 
-    public Skill create(Skill s) {
+    public Skill createSkill(Skill s) {
+        s.setActive(true);
         return repo.save(s);
     }
 
-    public Skill update(Long id, Skill s) {
-        Skill ex = repo.findById(id).orElseThrow();
+    public Skill updateSkill(Long id, Skill s) {
+        Skill ex = repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Skill not found"));
         ex.setName(s.getName());
         return repo.save(ex);
     }
 
-    public Skill get(Long id) {
-        return repo.findById(id).orElseThrow();
-    }
-
-    public List<Skill> getAll() {
-        return repo.findAll();
-    }
-
-    public void deactivate(Long id) {
-        Skill s = get(id);
+    public void deactivateSkill(Long id) {
+        Skill s = repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Skill not found"));
         s.setActive(false);
         repo.save(s);
     }

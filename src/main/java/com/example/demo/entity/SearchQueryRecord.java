@@ -1,43 +1,37 @@
-package com.example.demo.entity;
+package com.example.demo.model;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 public class SearchQueryRecord {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
 
-    private Long userId;
-    private String skills;
-    private Integer resultCount;
+    private Long searcherId;
+    private String skillsRequested;
+    private Integer resultsCount = 0;
+    private LocalDateTime searchedAt;
 
-    public Long getId() {
-        return id;
+    @PrePersist
+    public void onCreate() {
+        this.searchedAt = LocalDateTime.now();
+        this.resultsCount = 0;
     }
 
-    public Long getUserId() {
-        return userId;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
+    public Long getSearcherId() { return searcherId; }
+    public void setSearcherId(Long searcherId) { this.searcherId = searcherId; }
 
-    public String getSkills() {
-        return skills;
-    }
+    public String getSkillsRequested() { return skillsRequested; }
+    public void setSkillsRequested(String skillsRequested) { this.skillsRequested = skillsRequested; }
 
-    public void setSkills(String skills) {
-        this.skills = skills;
-    }
+    public Integer getResultsCount() { return resultsCount; }
+    public void setResultsCount(Integer resultsCount) { this.resultsCount = resultsCount; }
 
-    public Integer getResultCount() {
-        return resultCount;
-    }
-
-    public void setResultCount(Integer resultCount) {
-        this.resultCount = resultCount;
-    }
+    public LocalDateTime getSearchedAt() { return searchedAt; }
 }

@@ -1,4 +1,4 @@
-package com.example.demo.entity;
+package com.example.demo.model;
 
 import jakarta.persistence.*;
 
@@ -6,38 +6,34 @@ import jakarta.persistence.*;
 public class EmployeeSkill {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
 
-    private String proficiency;
-    private Integer experience;
+    @ManyToOne
+    private Employee employee;
+
+    @ManyToOne
+    private Skill skill;
+
+    private String proficiencyLevel;
+    private Integer yearsOfExperience;
     private Boolean active = true;
 
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public String getProficiency() {
-        return proficiency;
-    }
+    public Employee getEmployee() { return employee; }
+    public void setEmployee(Employee employee) { this.employee = employee; }
 
-    public void setProficiency(String proficiency) {
-        this.proficiency = proficiency;
-    }
+    public Skill getSkill() { return skill; }
+    public void setSkill(Skill skill) { this.skill = skill; }
 
-    public Integer getExperience() {
-        return experience;
-    }
+    public String getProficiencyLevel() { return proficiencyLevel; }
+    public void setProficiencyLevel(String proficiencyLevel) { this.proficiencyLevel = proficiencyLevel; }
 
-    public void setExperience(Integer experience) {
-        this.experience = experience;
-    }
+    public Integer getYearsOfExperience() { return yearsOfExperience; }
+    public void setYearsOfExperience(Integer yearsOfExperience) { this.yearsOfExperience = yearsOfExperience; }
 
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
+    public Boolean getActive() { return active; }
+    public void setActive(Boolean active) { this.active = active; }
 }
