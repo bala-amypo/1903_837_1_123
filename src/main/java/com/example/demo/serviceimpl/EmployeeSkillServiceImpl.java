@@ -1,65 +1,98 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.*;
-import com.example.demo.repository.*;
-import com.example.demo.service.EmployeeSkillService;
 import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.model.Employee;
+import com.example.demo.model.EmployeeSkill;
+import com.example.demo.model.Skill;
+import com.example.demo.repository.EmployeeRepository;
+import com.example.demo.repository.EmployeeSkillRepository;
+import com.example.demo.repository.SkillRepository;
+import com.example.demo.service.EmployeeSkillService;
 
 import java.util.List;
 import java.util.Set;
 
 public class EmployeeSkillServiceImpl implements EmployeeSkillService {
 
-    private final EmployeeSkillRepository repo;
-    private final EmployeeRepository employeeRepo;
-    private final SkillRepository skillRepo;
+    private final EmployeeSkillRepository employeeSkillRepository;
+    private final EmployeeRepository employeeRepository;
+    private final SkillRepository skillRepository;
 
     private static final Set<String> LEVELS =
             Set.of("Beginner", "Intermediate", "Advanced", "Expert");
 
-    public EmployeeSkillServiceImpl(EmployeeSkillRepository r,
-                                    EmployeeRepository er,
-                                    SkillRepository sr) {
-        this.repo = r;
-        this.employeeRepo = er;
-        this.skillRepo = sr;
+    public EmployeeSkillServiceImpl(EmployeeSkillRepository employeeSkillRepository,
+                                    EmployeeRepository employeeRepository,
+                                    SkillRepository skillRepository) {
+        this.employeeSkillRepository = employeeSkillRepository;
+        this.employeeRepository = employeeRepository;
+        this.skillRepository = skillRepository;
     }
 
+    @Override
     public EmployeeSkill createEmployeeSkill(EmployeeSkill es) {
 
-        if (es.getYearsOfExperience() < 0)
+        if (es.getYearsOfExperience() < 0) {
             throw new IllegalArgumentException("Experience years");
+        }
 
-        if (!LEVELS.contains(es.getProficiencyLevel()))
+        if (!LEVELS.contains(es.getProficiencyLevel())) {
             throw new IllegalArgumentException("Invalid proficiency");
+        }
 
-        Employee emp = employeeRepo.findById(es.getEmployee().getId())
+        Employee emp = employeeRepository.findById(es.getEmployee().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Employee not found"));
 
-        Skill skill = skillRepo.findById(es.getSkill().getId())
+        Skill skill = skillRepository.findById(es.getSkill().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Skill not found"));
 
-        if (!emp.getActive())
+        if (!emp.getActive()) {
             throw new IllegalArgumentException("inactive employee");
+        }
 
-        if (!skill.getActive())
+        if (!skill.getActive()) {
             throw new IllegalArgumentException("inactive skill");
+        }
 
-        return repo.save(es);
+        return employeeSkillRepository.save(es);
     }
 
-    public List<EmployeeSkill> getSkillsForEmployee(Long id) {
-        return repo.findByEmployeeIdAndActiveTrue(id);
+    // 🔥 THIS METHOD WAS MISSING — NOW FIXED
+    @Override
+    public EmployeeSkill updateEmployeeSkill(Long id, EmployeeSkill es) {
+
+        EmployeeSkill existing = employeeSkillRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("EmployeeSkill not found"));
+
+        if (es.getYearsOfExperience() < 0) {
+            throw new IllegalArgumentException("Experience years");
+        }
+
+        if (!LEVELS.contains(es.getProficiencyLevel())) {
+            throw new IllegalArgumentException("Invalid proficiency");
+        }
+
+        existing.setProficiencyLevel(es.getProficiencyLevel());
+        existing.setYearsOfExperience(es.getYearsOfExperience());
+
+        return employeeSkillRepository.save(existing);
     }
 
-    public List<EmployeeSkill> getEmployeesBySkill(Long id) {
-        return repo.findBySkillIdAndActiveTrue(id);
+    @Override
+    public List<EmployeeSkill> getSkillsForEmployee(Long employeeId) {
+        return employeeSkillRepository.findByEmployeeIdAndActiveTrue(employeeId);
     }
 
+    @Override
+    public List<EmployeeSkill> getEmployeesBySkill(Long skillId) {
+        return employeeSkillRepository.findBySkillIdAndActiveTrue(skillId);
+    }
+
+    @Override
     public void deactivateEmployeeSkill(Long id) {
-        EmployeeSkill es = repo.findById(id)
+        EmployeeSkill es = employeeSkillRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("EmployeeSkill not found"));
         es.setActive(false);
-        repo.save(es);
+        employeeSkillRepository.save(es);
     }
 }
