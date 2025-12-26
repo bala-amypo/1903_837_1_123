@@ -5,6 +5,8 @@ import com.example.demo.model.Skill;
 import com.example.demo.repository.SkillRepository;
 import com.example.demo.service.SkillService;
 
+import java.util.List;
+
 public class SkillServiceImpl implements SkillService {
 
     private final SkillRepository repo;
@@ -39,5 +41,12 @@ public class SkillServiceImpl implements SkillService {
 public List<Skill> getAllSkills() {
     return repo.findAll();
 }
+
+@Override
+public Skill getSkillById(Long id) {
+    return repo.findById(id)
+            .orElseThrow(() -> new RuntimeException("Skill not found"));
+}
+
 
 }
