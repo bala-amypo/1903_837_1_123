@@ -13,7 +13,7 @@ import java.util.Date;
 public class JwtTokenProvider {
 
     private static final SecretKey KEY =
-            Keys.hmacShaKeyFor("secret-key-demo-secret-key-demo".getBytes());
+            Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
     private static final long EXPIRATION_TIME = 60 * 60 * 1000; // 1 hour
 
@@ -24,7 +24,7 @@ public class JwtTokenProvider {
                 .claim("role", role)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .signWith(KEY, SignatureAlgorithm.HS256)
+                .signWith(KEY)
                 .compact();
     }
 
