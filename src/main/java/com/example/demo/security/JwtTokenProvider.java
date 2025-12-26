@@ -48,9 +48,6 @@ public class JwtTokenProvider {
         return getClaims(token).get("userId", Long.class);
     }
 
-    public String getRoleFromToken(String token) {
-        return getClaims(token).get("role", String.class);
-    }
 
     public Claims getClaims(String token) {
         return Jwts.parserBuilder()

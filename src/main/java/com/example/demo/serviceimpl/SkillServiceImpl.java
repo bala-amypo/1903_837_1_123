@@ -34,4 +34,10 @@ public class SkillServiceImpl implements SkillService {
         skill.setActive(false);
         repo.save(skill);
     }
+
+    @Override
+public List<Skill> getAllSkills() {
+    return repo.findAll();
+}
+
 }
