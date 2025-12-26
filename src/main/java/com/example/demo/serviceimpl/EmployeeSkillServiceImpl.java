@@ -8,44 +8,42 @@ import com.example.demo.repository.EmployeeRepository;
 import com.example.demo.repository.EmployeeSkillRepository;
 import com.example.demo.repository.SkillRepository;
 import com.example.demo.service.EmployeeSkillService;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Set;
 
-@Service
 public class EmployeeSkillServiceImpl implements EmployeeSkillService {
 
-    private final EmployeeSkillRepository employeeSkillRepository;
-    private final EmployeeRepository employeeRepository;
-    private final SkillRepository skillRepository;
+    private static final Set<String> VALID_LEVELS =
+            Set.of("Beginner", "Intermediate", "Advanced");
 
-    private static final Set<String> LEVELS =
-            Set.of("Beginner", "Intermediate", "Advanced", "Expert");
+    private final EmployeeSkillRepository repo;
+    private final EmployeeRepository empRepo;
+    private final SkillRepository skillRepo;
 
-    public EmployeeSkillServiceImpl(EmployeeSkillRepository employeeSkillRepository,
-                                    EmployeeRepository employeeRepository,
-                                    SkillRepository skillRepository) {
-        this.employeeSkillRepository = employeeSkillRepository;
-        this.employeeRepository = employeeRepository;
-        this.skillRepository = skillRepository;
+    public EmployeeSkillServiceImpl(EmployeeSkillRepository r,
+                                    EmployeeRepository e,
+                                    SkillRepository s) {
+        this.repo = r;
+        this.empRepo = e;
+        this.skillRepo = s;
     }
 
     @Override
     public EmployeeSkill createEmployeeSkill(EmployeeSkill es) {
 
         if (es.getYearsOfExperience() < 0) {
-            throw new IllegalArgumentException("Experience years");
+            throw new IllegalArgumentException("Experience years must be >= 0");
         }
 
-        if (!LEVELS.contains(es.getProficiencyLevel())) {
+        if (!VALID_LEVELS.contains(es.getProficiencyLevel())) {
             throw new IllegalArgumentException("Invalid proficiency");
         }
 
-        Employee emp = employeeRepository.findById(es.getEmployee().getId())
+        Employee emp = empRepo.findById(es.getEmployee().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Employee not found"));
 
-        Skill skill = skillRepository.findById(es.getSkill().getId())
+        Skill skill = skillRepo.findById(es.getSkill().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Skill not found"));
 
         if (!emp.getActive()) {
@@ -56,45 +54,24 @@ public class EmployeeSkillServiceImpl implements EmployeeSkillService {
             throw new IllegalArgumentException("inactive skill");
         }
 
-        return employeeSkillRepository.save(es);
-    }
-
-    // 🔥 THIS METHOD WAS MISSING — NOW FIXED
-    @Override
-    public EmployeeSkill updateEmployeeSkill(Long id, EmployeeSkill es) {
-
-        EmployeeSkill existing = employeeSkillRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("EmployeeSkill not found"));
-
-        if (es.getYearsOfExperience() < 0) {
-            throw new IllegalArgumentException("Experience years");
-        }
-
-        if (!LEVELS.contains(es.getProficiencyLevel())) {
-            throw new IllegalArgumentException("Invalid proficiency");
-        }
-
-        existing.setProficiencyLevel(es.getProficiencyLevel());
-        existing.setYearsOfExperience(es.getYearsOfExperience());
-
-        return employeeSkillRepository.save(existing);
-    }
-
-    @Override
-    public List<EmployeeSkill> getSkillsForEmployee(Long employeeId) {
-        return employeeSkillRepository.findByEmployeeIdAndActiveTrue(employeeId);
-    }
-
-    @Override
-    public List<EmployeeSkill> getEmployeesBySkill(Long skillId) {
-        return employeeSkillRepository.findBySkillIdAndActiveTrue(skillId);
+        return repo.save(es);
     }
 
     @Override
     public void deactivateEmployeeSkill(Long id) {
-        EmployeeSkill es = employeeSkillRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("EmployeeSkill not found"));
+        EmployeeSkill es = repo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Mapping not found"));
         es.setActive(false);
-        employeeSkillRepository.save(es);
+        repo.save(es);
+    }
+
+    @Override
+    public List<EmployeeSkill> getSkillsForEmployee(Long id) {
+        return repo.findByEmployeeIdAndActiveTrue(id);
+    }
+
+    @Override
+    public List<EmployeeSkill> getEmployeesBySkill(Long id) {
+        return repo.findBySkillIdAndActiveTrue(id);
     }
 }
