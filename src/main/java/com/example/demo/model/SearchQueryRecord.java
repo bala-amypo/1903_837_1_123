@@ -1,36 +1,41 @@
 package com.example.demo.model;
 
-import jakarta.persistence.*;
-import java.time.LocalDateTime;
-
-@Entity
 public class SearchQueryRecord {
 
-    @Id
-    @GeneratedValue
     private Long id;
+    private String keyword;
+    private Long employeeId;
 
-    private Long searcherId;
-    private String skillsRequested;
-    private Integer resultsCount = 0;
-    private LocalDateTime searchedAt;
-
-    @PrePersist
-    public void onCreate() {
-        this.searchedAt = LocalDateTime.now();
-        if (resultsCount == null) resultsCount = 0;
+    public SearchQueryRecord() {
     }
 
-    public Long getId() { return id; }
+    public SearchQueryRecord(Long id, String keyword, Long employeeId) {
+        this.id = id;
+        this.keyword = keyword;
+        this.employeeId = employeeId;
+    }
 
-    public Long getSearcherId() { return searcherId; }
-    public void setSearcherId(Long searcherId) { this.searcherId = searcherId; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getSkillsRequested() { return skillsRequested; }
-    public void setSkillsRequested(String skillsRequested) { this.skillsRequested = skillsRequested; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public Integer getResultsCount() { return resultsCount; }
-    public void setResultsCount(Integer resultsCount) { this.resultsCount = resultsCount; }
+    public String getKeyword() {
+        return keyword;
+    }
 
-    public LocalDateTime getSearchedAt() { return searchedAt; }
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
+    }
+
+    public Long getEmployeeId() {
+        return employeeId;
+    }
+
+    public void setEmployeeId(Long employeeId) {
+        this.employeeId = employeeId;
+    }
 }
