@@ -1,24 +1,20 @@
 package com.example.demo.security;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-
+import io.jsonwebtoken.*;
 import java.util.Date;
-
 
 public class JwtTokenProvider {
 
-    private final String secret = "secret-key";
-    private final long validity = 3600000;
+    private final String secret = "secretkey123";
+    private final long expiry = 86400000;
 
     public String generateToken(Long userId, String email, String role) {
         return Jwts.builder()
+                .setSubject(email)
                 .claim("userId", userId)
-                .claim("email", email)
                 .claim("role", role)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + validity))
+                .setExpiration(new Date(System.currentTimeMillis() + expiry))
                 .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();
     }
@@ -38,7 +34,7 @@ public class JwtTokenProvider {
     }
 
     public String getEmailFromToken(String token) {
-        return getClaims(token).get("email", String.class);
+        return getClaims(token).getSubject();
     }
 
     public Long getUserIdFromToken(String token) {
