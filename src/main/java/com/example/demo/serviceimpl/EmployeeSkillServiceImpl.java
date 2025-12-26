@@ -12,6 +12,7 @@ import com.example.demo.service.EmployeeSkillService;
 import java.util.List;
 import java.util.Set;
 
+@Service
 public class EmployeeSkillServiceImpl implements EmployeeSkillService {
 
     private final EmployeeSkillRepository employeeSkillRepository;

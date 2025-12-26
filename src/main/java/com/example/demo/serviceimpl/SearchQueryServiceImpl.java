@@ -10,6 +10,7 @@ import com.example.demo.exception.ResourceNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 public class SearchQueryServiceImpl implements SearchQueryService {
 
     private final SearchQueryRecordRepository recordRepository;
