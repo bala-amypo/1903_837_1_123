@@ -1,8 +1,11 @@
 package com.example.demo.security;
 
 import io.jsonwebtoken.*;
+import org.springframework.stereotype.Component;
+
 import java.util.Date;
 
+@Component   // 🔥 THIS IS THE FIX
 public class JwtTokenProvider {
 
     private final String secret = "secretkey123";
@@ -29,8 +32,10 @@ public class JwtTokenProvider {
     }
 
     public Claims getClaims(String token) {
-        return Jwts.parser().setSigningKey(secret)
-                .parseClaimsJws(token).getBody();
+        return Jwts.parser()
+                .setSigningKey(secret)
+                .parseClaimsJws(token)
+                .getBody();
     }
 
     public String getEmailFromToken(String token) {
