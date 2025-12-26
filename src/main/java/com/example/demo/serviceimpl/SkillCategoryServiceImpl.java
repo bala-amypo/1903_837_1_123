@@ -1,41 +1,48 @@
-package com.example.demo.serviceimpl;
+package com.example.demo.service.impl;
 
 import com.example.demo.model.SkillCategory;
 import com.example.demo.repository.SkillCategoryRepository;
 import com.example.demo.service.SkillCategoryService;
-import org.springframework.stereotype.Service;
+import com.example.demo.exception.ResourceNotFoundException;
+
 import java.util.List;
 
-@Service
 public class SkillCategoryServiceImpl implements SkillCategoryService {
 
-    private final SkillCategoryRepository repo;
+    private final SkillCategoryRepository repository;
 
-    public SkillCategoryServiceImpl(SkillCategoryRepository repo) {
-        this.repo = repo;
+    public SkillCategoryServiceImpl(SkillCategoryRepository repository) {
+        this.repository = repository;
     }
 
-    public SkillCategory create(SkillCategory c) {
-        return repo.save(c);
+    @Override
+    public SkillCategory createCategory(SkillCategory category) {
+        category.setActive(true);
+        return repository.save(category);
     }
 
-    public SkillCategory update(Long id, SkillCategory c) {
-        SkillCategory ex = repo.findById(id).orElseThrow();
-        ex.setCategoryName(c.getCategoryName());
-        return repo.save(ex);
+    @Override
+    public SkillCategory updateCategory(Long id, SkillCategory category) {
+        SkillCategory existing = getCategoryById(id);
+        existing.setCategoryName(category.getCategoryName());
+        return repository.save(existing);
     }
 
-    public SkillCategory get(Long id) {
-        return repo.findById(id).orElseThrow();
+    @Override
+    public SkillCategory getCategoryById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("SkillCategory not found"));
     }
 
-    public List<SkillCategory> getAll() {
-        return repo.findAll();
+    @Override
+    public List<SkillCategory> getAllCategories() {
+        return repository.findAll();
     }
 
-    public void deactivate(Long id) {
-        SkillCategory c = get(id);
-        c.setActive(false);
-        repo.save(c);
+    @Override
+    public void deactivateCategory(Long id) {
+        SkillCategory category = getCategoryById(id);
+        category.setActive(false);
+        repository.save(category);
     }
 }

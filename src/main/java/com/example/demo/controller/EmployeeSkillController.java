@@ -17,28 +17,28 @@ public class EmployeeSkillController {
     }
 
     @PostMapping
-    public EmployeeSkill create(@RequestBody EmployeeSkill skill) {
-        return service.create(skill);
+    public EmployeeSkill create(@RequestBody EmployeeSkill employeeSkill) {
+        return service.createEmployeeSkill(employeeSkill);
     }
 
     @PutMapping("/{id}")
     public EmployeeSkill update(@PathVariable Long id,
-                                @RequestBody EmployeeSkill skill) {
-        return service.update(id, skill);
+                                @RequestBody EmployeeSkill employeeSkill) {
+        return service.updateEmployeeSkill(id, employeeSkill);
     }
 
     @GetMapping("/employee/{employeeId}")
     public List<EmployeeSkill> getByEmployee(@PathVariable Long employeeId) {
-        return service.getByEmployee(employeeId);
+        return service.getSkillsForEmployee(employeeId);
     }
 
     @GetMapping("/skill/{skillId}")
     public List<EmployeeSkill> getBySkill(@PathVariable Long skillId) {
-        return service.getBySkill(skillId);
+        return service.getEmployeesBySkill(skillId);
     }
 
     @PutMapping("/{id}/deactivate")
     public void deactivate(@PathVariable Long id) {
-        service.deactivate(id);
+        service.deactivateEmployeeSkill(id);
     }
 }

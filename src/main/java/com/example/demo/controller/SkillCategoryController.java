@@ -18,17 +18,27 @@ public class SkillCategoryController {
 
     @PostMapping
     public SkillCategory create(@RequestBody SkillCategory category) {
-        return service.create(category);
+        return service.createCategory(category);
+    }
+
+    @PutMapping("/{id}")
+    public SkillCategory update(@PathVariable Long id,
+                                @RequestBody SkillCategory category) {
+        return service.updateCategory(id, category);
+    }
+
+    @GetMapping("/{id}")
+    public SkillCategory getById(@PathVariable Long id) {
+        return service.getCategoryById(id);
     }
 
     @GetMapping
     public List<SkillCategory> getAll() {
-        return service.getAll();
+        return service.getAllCategories();
     }
 
     @PutMapping("/{id}/deactivate")
-    public String deactivate(@PathVariable Long id) {
-        service.deactivate(id);
-        return "Category deactivated";
+    public void deactivate(@PathVariable Long id) {
+        service.deactivateCategory(id);
     }
 }

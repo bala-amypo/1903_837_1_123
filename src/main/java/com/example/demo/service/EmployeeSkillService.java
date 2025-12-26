@@ -5,14 +5,13 @@ import java.util.List;
 
 public interface EmployeeSkillService {
 
-    EmployeeSkill create(EmployeeSkill skill);
+    EmployeeSkill createEmployeeSkill(EmployeeSkill employeeSkill);
 
-    EmployeeSkill update(Long id, EmployeeSkill skill);
+    EmployeeSkill updateEmployeeSkill(Long id, EmployeeSkill employeeSkill);
 
-    List<EmployeeSkill> getByEmployee(Long employeeId);
+    List<EmployeeSkill> getSkillsForEmployee(Long employeeId);
 
-    List<EmployeeSkill> getBySkill(Long skillId);
+    List<EmployeeSkill> getEmployeesBySkill(Long skillId);
 
-    void deactivate(Long id);
+    void deactivateEmployeeSkill(Long id);
 }
-
